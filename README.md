@@ -5,6 +5,8 @@
 > **This addon requires you to have [SuperWoW](https://github.com/balakethelock/SuperWoW) installed.**
 >
 > It won't work without it. Really.
+>
+> This version of Cursive was modified to support [Cursive Tank Target](https://github.com/zanthor/CursiveTankTarget).
 
 ![image](https://github.com/pepopo978/Cursive/assets/149287158/801511af-29c7-4baf-b1ac-5e8c52f0f846)
 
