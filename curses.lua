@@ -39,6 +39,39 @@ local curses = {
 	sharedDebuffGuids = {
 		faeriefire = {}, -- used for scanning for shared debuffs like faerie fire
 	}, -- used for scanning for shared debuffs like faerie fire
+
+	-- Whitelist of mobs that can bleed (for rake tracking at client debuff cap)
+	mobsThatBleed = {
+		["0xF13000F1F3276A33"] = true, -- Keeper Gnarlmoon
+		["0xF13000F1FA276A32"] = true, -- Ley-Watcher Incantagos
+		["0xF13000EA3F276C05"] = true, -- King
+		["0xF13000EA31279058"] = true, -- Queen
+		["0xF13000EA43276C06"] = true, -- Bishop
+		["0xF13000EA44279044"] = true, -- Pawn
+		["0xF13000EA42276C07"] = true, -- Rook
+		["0xF13000EA4D05DA44"] = true, -- Sanv Tas'dal
+		["0xF13000EA57276C04"] = true, -- Kruul
+		["0xF130016C95276DAF"] = true, -- Mephistroth
+
+		["0xF130003E5401591A"] = true, --Anub'Rekhan
+		["0xF130003E510159B0"] = true, --Grand Widow Faerlina
+		["0xF130003E500159A3"] = true, --Maexxna
+		["0xF130003EBD01598C"] = true, --Razuvious
+		["0xF130003EBC01599F"] = true, --Gothik
+		["0xF130003EBF015AB2"] = true, --Zeliek
+		["0xF130003EBE015AB3"] = true, --Mograine
+		["0xF130003EC1015AB1"] = true, --Blaumeux
+		["0xF130003EC0015AB0"] = true, --Thane
+		["0xF130003E52015824"] = true, --Noth
+		["0xF130003E4001588D"] = true, --Heigan
+		["0xF130003E8B0158A2"] = true, --Loatheb
+		["0xF130003E9C0158EA"] = true, --Patchwerk
+		["0xF130003E3B0158EF"] = true, --Grobbulus
+		["0xF130003E3C0158F0"] = true, --Gluth
+		["0xF130003E380159A0"] = true, --Thaddius
+		["0xF130003E75015AB4"] = true, --Sapphiron
+		["0xF130003E76015AED"] = true, --Kel'Thuzad
+	},
 }
 
 -- combat events for curses
@@ -237,9 +270,9 @@ end
 Cursive:RegisterEvent("SPELLCAST_CHANNEL_START", function()
 	curses.isChanneling = true
 end);
+
 Cursive:RegisterEvent("SPELLCAST_CHANNEL_STOP", StopChanneling);
 Cursive:RegisterEvent("SPELLCAST_INTERRUPTED", StopChanneling);
-Cursive:RegisterEvent("SPELLCAST_FAILED", StopChanneling);
 
 Cursive:RegisterEvent("UNIT_CASTEVENT", function(casterGuid, targetGuid, event, spellID, castDuration)
 	-- immolate will fire both start and cast
@@ -462,7 +495,7 @@ end
 function curses:TimeRemaining(curseData)
 	local dhReduction = 0
 
-	if curses.trackedCurseIds[curseData.spellID].darkHarvest then
+	if curses.trackedCurseIds[curseData.spellID] and curses.trackedCurseIds[curseData.spellID].darkHarvest then
 		curses:TrackDarkHarvest(curseData)
 
 		dhReduction = curses:GetDarkHarvestReduction(curseData)
@@ -552,8 +585,22 @@ function curses:HasCurse(lowercaseSpellNameNoRank, targetGuid, minRemaining)
 		lowercaseSpellNameNoRank = L["faerie fire"]
 	end
 
+  -- handle malediction for warlocks
+  if curses.isWarlock and
+      lowercaseSpellNameNoRank == L["curse of recklessness"] or
+      lowercaseSpellNameNoRank == L["curse of the elements"] or
+      lowercaseSpellNameNoRank == L["curse of shadow"] then
+    -- check if they have malediction
+    local _, _, _, _, malediction = GetTalentInfo(1, 17)
+
+    if malediction > 0 then
+      lowercaseSpellNameNoRank = L["curse of agony"] -- check for curse of agony instead
+    end
+  end
+
 	if curses.guids[targetGuid] and curses.guids[targetGuid][lowercaseSpellNameNoRank] then
 		local remaining = Cursive.curses:TimeRemaining(curses.guids[targetGuid][lowercaseSpellNameNoRank])
+
 		if remaining >= minRemaining then
 			return true
 		end
@@ -600,16 +647,11 @@ function curses:ApplyCurse(spellID, targetGuid, startTime, duration)
 	local rank = curses.trackedCurseIds[spellID].rank
 
 	if curses.isDruid and name == L["rake"] then
-		-- check that target has rake debuff
-		-- some mobs are immune and don't trigger the "spell failed xxx is immune" log
-		for i = 1, 32 do
-			local _, _, _, debuffSpellId = UnitDebuff(targetGuid, i)
-			if debuffSpellId then
-				if debuffSpellId == spellID then
-					break
-				end
-			else
-				-- no rake found, don't add curse
+		-- check if mob is in bleed whitelist first
+		-- these bosses are most likely to hit 48 client debuff cap
+		if not curses.mobsThatBleed[targetGuid] then
+			if not curses:ScanGuidForCurse(targetGuid, spellID) then
+				-- rake not found on target, do not apply
 				return
 			end
 		end

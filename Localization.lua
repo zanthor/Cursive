@@ -61,7 +61,8 @@ L:RegisterTranslations("enUS", function()
 		["Raid Icon Size"] = true,
 		["Curse Icon Size"] = true,
 		["Spacing"] = true,
-		["Text Size"] = true,
+		["Name/Hp Text Size"] = true,
+		["Curse Timer Text Size"] = true,
 		["Scale"] = true,
 		["In Combat"] = true,
 		["Player"] = true,
@@ -102,7 +103,7 @@ L:RegisterTranslations("enUS", function()
 		["Expiring latest -> soonest"] = true,
 		["Not ignored"] = true,
 		["Ignored Mobs List (Enter to save)"] = true,
-		["Comma separated list of strings to ignore if found in the unit name"] = true,
+		["Ignored Mobs Desc"] = "Comma separated list of strings to ignore if found in the unit name.  If you use any of these regex characters (*+%?) it will do a regex search otherwise it will do a plain text search.  So both Rift-Lost and Rift%-Lost should work.",
 		["Shared Faerie Fire"] = true,
 		["This will show other player's Faerie Fires and avoid trying to cast Faerie Fire on those mobs"] = true,
 
@@ -171,10 +172,12 @@ L:RegisterTranslations("enUS", function()
 		["expose armor"] = true,
 		["garrote"] = true,
 		["deadly poison"] = true,
-		["deadly poison II"] = true,
-		["deadly poison III"] = true,
-		["deadly poison IV"] = true,
-		["deadly poison V"] = true,
+		["deadly poison ii"] = true,
+		["deadly poison iii"] = true,
+		["deadly poison iv"] = true,
+		["deadly poison v"] = true,
+		["corrosive poison"] = true,
+		["corrosive poison ii"] = true,
 		["hemorrhage"] = true,
 		["cheap shot"] = true,
 
@@ -271,7 +274,8 @@ L:RegisterTranslations("zhCN", function()
 		["Raid Icon Size"] = "团队标记大小",
 		["Curse Icon Size"] = "诅咒图标大小",
 		["Spacing"] = "间距",
-		["Text Size"] = "文本大小",
+		["Name/Hp Text Size"] = "名称/生命值文字大小",
+		["Curse Timer Text Size"] = "诅咒计时器文字大小",
 		["Scale"] = "缩放",
 		["In Combat"] = "战斗中",
 		["Player"] = "玩家",
@@ -309,7 +313,7 @@ L:RegisterTranslations("zhCN", function()
 		["Expiring latest -> soonest"] = "最新->即将到期",
 		["Not ignored"] = "不被忽略",
 		["Ignored Mobs List (Enter to save)"] = "忽略的怪物列表（回车保存）",
-		["Comma separated list of strings to ignore if found in the unit name"] = "如果在单位名称中找到，则忽略的字符串列表，用半角逗号分隔",
+		["Ignored Mobs Desc"] = "用逗号分隔的字符串列表，如果在单位名称中找到则忽略。如果你使用了这些正则表达式字符(*+%?)，它将进行正则表达式搜索，否则将进行纯文本搜索。所以Rift-Lost和Rift%-Lost都应该有效.",
 		["Shared Faerie Fire"] = "共享精灵之火",
 		["This will show other player's Faerie Fires and avoid trying to cast Faerie Fire on those mobs"] = "这将显示其他玩家的精灵之火，并避免尝试在这些怪物上施放精灵之火",
 
@@ -378,10 +382,12 @@ L:RegisterTranslations("zhCN", function()
 		["expose armor"] = "破甲", -- no idea if right
 		["garrote"] = "锁喉", -- no idea if right
 		["deadly poison"] = "致命毒药", -- no idea if right
-		["deadly poison II"] = "致命毒药 II",
-		["deadly poison III"] = "致命毒药 III",
-		["deadly poison IV"] = "致命毒药 IV",
-		["deadly poison V"] = "致命毒药 V",
+		["deadly poison ii"] = "致命毒药 II",
+		["deadly poison iii"] = "致命毒药 III",
+		["deadly poison iv"] = "致命毒药 IV",
+		["deadly poison v"] = "致命毒药 V",
+		["corrosive poison"] = "腐蚀毒药",
+		["corrosive poison ii"] = "腐蚀毒药 II",
 		["hemorrhage"] = "出血", -- no idea if right
 		["cheap shot"] = "肮脏的打击", -- no idea if right
 

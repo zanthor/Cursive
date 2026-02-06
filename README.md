@@ -62,17 +62,17 @@ EXAMPLE: `/script targetGuid = Cursive:GetTarget("Corruption", "HIGHEST_HP", {})
     - Square = 6
     - Moon = 5
     - Triangle = 4
-    - Circle = 3
-    - Star = 2
-    - Diamond = 1 (8th priority)
+    - Diamond = 3
+    - Circle = 2
+    - Star = 1 (8th priority)
     - No mark = 0
 - RAID_MARK_SQUARE - Target largest raid mark but ignore Skull and Cross. Priority is as follows:
     - Square = 6 (1st priority)
     - Moon = 5
     - Triangle = 4
-    - Circle = 3
-    - Star = 2
-    - Diamond = 1
+    - Diamond = 3
+    - Circle = 2
+    - Star = 1
     - No mark = 0
     - Cross = -1
     - Skull = -2 (9th priority)
@@ -188,6 +188,8 @@ All commands will ignore targets with the following CCs on them:
 
 Multicurse will only ever target enemies that are already in combat (except if you target a mob directly first) to
 prevent pulling things you didn't intend like marked patrols.
+
+For Warlocks with the Malediction talent, when checking if Curse of Recklessness, Curse of the Elements, or Curse of Shadow is already on a target, the addon will instead check for Curse of Agony to allow you to refresh agony using them.  Don't use the refreshtime option with this as the server won't refresh Curse of Agony if it is still on the mob.
 
 Mobs with raid marks will be displayed first.
 
